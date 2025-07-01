@@ -1,0 +1,80 @@
+plugins {
+    id 'org.openapi.generator' version '7.6.0'
+    id 'java'
+    id 'maven-publish'
+    id 'net.researchgate.release' version '3.0.2'
+}
+
+group = 'com.calendar.api'
+
+def gitRef = System.getenv("GITHUB_REF") ?: "refs/heads/local"
+def isMainBranch = gitRef.endsWith("/main")
+def baseVersion = findProperty("version") ?: "0.1.0"
+
+version = isMainBranch ? baseVersion : "${baseVersion}-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+def generatedDir = layout.buildDirectory.dir("generated/api")
+
+openApiGenerate {
+    generatorName.set("kotlin-spring")
+    inputSpec.set("${rootDir}/api/main-api-file.yaml")
+    outputDir.set(generatedDir.get().asFile.absolutePath)
+    apiPackage.set("org.openapi.example.api")
+    invokerPackage.set("org.openapi.example.invoker")
+    modelPackage.set("org.openapi.example.model")
+    configOptions.put("interfaceOnly", "true")
+    configOptions.put("dateLibrary", "java8")
+    configOptions.put("useSpringBoot3", "true")
+    configOptions.put("reactive", "false")
+}
+
+tasks.register('generateServer') {
+    dependsOn tasks.openApiGenerate
+}
+
+tasks.withType(JavaCompile).configureEach {
+    dependsOn tasks.openApiGenerate
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/api/src/main/kotlin"
+        }
+    }
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            from components.java
+            groupId = project.group
+            artifactId = 'calendar-api'
+            version = project.version
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/collab-timekit/calendar-api")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user")
+                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.token")
+            }
+        }
+    }
+}
+
+release {
+    tagTemplate = 'v${version}'
+    versionPropertyFile = 'gradle.properties'
+    failOnSnapshotDependencies = false
+    preTagCommitMessage = '[Release] - pre tag'
+    tagCommitMessage = '[Release] - tag v${version}'
+    newVersionCommitMessage = '[Release] - next version bumped to ${version}'
+}

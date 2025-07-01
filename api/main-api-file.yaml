@@ -1,0 +1,409 @@
+openapi: 3.0.3
+info:
+  title: Calendar API
+  version: 1.0.0
+  description: API do zarządzania kalendarzami i wydarzeniami
+
+paths:
+  /api/events/search:
+    post:
+      summary: Pobierz wydarzenia wg filtru wyszukiwania
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchFilter'
+      responses:
+        '200':
+          description: Lista wydarzeń
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /api/events:
+    post:
+      summary: Utwórz nowe wydarzenie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventDto'
+      responses:
+        '200':
+          description: Utworzone wydarzenie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+  /api/events/{eventId}/attendees:
+    post:
+      summary: Dodaj uczestników do wydarzenia
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: integer
+          required: true
+          description: ID wydarzenia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AttendeeDto'
+      responses:
+        '204':
+          description: Uczestnicy dodani
+
+  /api/events/{eventId}/attendees/{attendeeId}:
+    delete:
+      summary: Usuń uczestnika z wydarzenia
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: attendeeId
+          schema:
+            type: string
+          required: true
+      responses:
+        '204':
+          description: Uczestnik usunięty
+
+  /api/events/{eventId}/response:
+    post:
+      summary: Odpowiedz na zaproszenie na wydarzenie
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/ResponseStatus'
+          required: true
+          description: Status odpowiedzi
+      responses:
+        '204':
+          description: Odpowiedź zapisana
+
+  /api/events/{eventId}:
+    get:
+      summary: Pobierz szczegóły wydarzenia
+      parameters:
+        - in: path
+          name: eventId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Szczegóły wydarzenia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+  /api/calendars:
+    post:
+      summary: Utwórz nowy kalendarz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalendarDto'
+      responses:
+        '201':
+          description: Utworzony kalendarz
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Calendar'
+
+    get:
+      summary: Pobierz kalendarze użytkownika
+      responses:
+        '200':
+          description: Lista kalendarzy
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Calendar'
+
+  /api/calendars/{calendarId}:
+    get:
+      summary: Pobierz szczegóły kalendarza
+      parameters:
+        - in: path
+          name: calendarId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Szczegóły kalendarza
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Calendar'
+
+    put:
+      summary: Aktualizuj kalendarz
+      parameters:
+        - in: path
+          name: calendarId
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalendarDto'
+      responses:
+        '200':
+          description: Zaktualizowany kalendarz
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Calendar'
+
+    delete:
+      summary: Usuń kalendarz
+      parameters:
+        - in: path
+          name: calendarId
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: Kalendarz usunięty
+
+components:
+  schemas:
+    EventDto:
+      type: object
+      properties:
+        calendarId:
+          type: integer
+          example: 1
+        title:
+          type: string
+          maxLength: 100
+          example: Meeting with team
+        description:
+          type: string
+          maxLength: 500
+          example: Discuss project roadmap
+        startTime:
+          type: string
+          format: date-time
+          example: "2025-07-01T10:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2025-07-01T11:00:00Z"
+        location:
+          type: string
+          maxLength: 100
+          example: Office room 101
+        attendees:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttendeeDto'
+      required:
+        - calendarId
+        - title
+        - startTime
+        - endTime
+
+    AttendeeDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "jan.kowalski@example.com"
+        optional:
+          type: boolean
+          example: false
+      required:
+        - email
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        calendarId:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Team meeting
+        description:
+          type: string
+          example: Weekly team sync
+        startTime:
+          type: string
+          format: date-time
+          example: "2025-07-01T10:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          example: "2025-07-01T11:00:00Z"
+        location:
+          type: string
+          example: "Room 101"
+        organizerId:
+          type: string
+          example: "user-123"
+        status:
+          $ref: '#/components/schemas/EventStatus'
+        attendees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attendee'
+
+    Attendee:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 456
+        eventId:
+          type: integer
+          example: 123
+        userId:
+          type: string
+          example: "user-456"
+        email:
+          type: string
+          format: email
+          example: "anna.nowak@example.com"
+        displayName:
+          type: string
+          example: "Anna Nowak"
+        responseStatus:
+          $ref: '#/components/schemas/ResponseStatus'
+        optional:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-06-30T08:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2025-06-30T09:00:00Z"
+
+    EventStatus:
+      type: string
+      enum:
+        - PLANNED
+        - CANCELLED
+        - COMPLETED
+
+    ResponseStatus:
+      type: string
+      enum:
+        - PENDING
+        - ACCEPTED
+        - DECLINED
+        - TENTATIVE
+
+    CalendarDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Work Calendar
+        description:
+          type: string
+          example: Calendar for work events
+      required:
+        - name
+        - description
+
+    Calendar:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Work Calendar"
+        description:
+          type: string
+          example: "Calendar for work related events"
+        ownerId:
+          type: string
+          example: "user-123"
+
+    SearchFilter:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterRequest'
+        pageRequest:
+          $ref: '#/components/schemas/PageRequest'
+        sortRequest:
+          $ref: '#/components/schemas/SortRequest'
+
+    FilterRequest:
+      type: object
+      properties:
+        field:
+          type: string
+          example: "title"
+        operation:
+          type: string
+          example: "contains"
+        value:
+          type: string
+          example: "meeting"
+
+    PageRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 0
+        size:
+          type: integer
+          example: 20
+
+    SortRequest:
+      type: object
+      properties:
+        sortBy:
+          type: string
+          example: "startTime"
+        direction:
+          type: string
+          enum:
+            - ASC
+            - DESC
