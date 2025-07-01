@@ -3,8 +3,7 @@ name: Gradle Release
 on:
   push:
     branches:
-      - main
-      - 'feature/**'
+      - '**'
 
 jobs:
   build:
@@ -29,7 +28,7 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_REF: ${{ github.ref }}
         run: |
-          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+          if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
             echo "🔥 Performing release"
             ./gradlew release publish
           else
