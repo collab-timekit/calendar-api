@@ -8,10 +8,10 @@ plugins {
 group = 'com.calendar.api'
 
 def gitRef = System.getenv("GITHUB_REF") ?: "refs/heads/local"
-def isMainBranch = gitRef.endsWith("/master")
+def isMasterBranch = gitRef.endsWith("/master")
 def baseVersion = findProperty("version") ?: "0.1.0"
 
-version = isMainBranch ? baseVersion : "${baseVersion}-SNAPSHOT"
+version = isMasterBranch ? baseVersion : "${baseVersion}-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -23,9 +23,11 @@ openApiGenerate {
     generatorName.set("kotlin-spring")
     inputSpec.set("${rootDir}/api/main-api-file.yaml")
     outputDir.set(generatedDir.get().asFile.absolutePath)
-    apiPackage.set("org.openapi.example.api")
-    invokerPackage.set("org.openapi.example.invoker")
-    modelPackage.set("org.openapi.example.model")
+
+    apiPackage.set("com.calendar.api.api")
+    invokerPackage.set("com.calendar.api.invoker")
+    modelPackage.set("com.calendar.api.model")
+
     configOptions.put("interfaceOnly", "true")
     configOptions.put("dateLibrary", "java8")
     configOptions.put("useSpringBoot3", "true")
@@ -77,4 +79,8 @@ release {
     preTagCommitMessage = '[Release] - pre tag'
     tagCommitMessage = '[Release] - tag v${version}'
     newVersionCommitMessage = '[Release] - next version bumped to ${version}'
+
+    git {
+        requireBranch.set('master')
+    }
 }
