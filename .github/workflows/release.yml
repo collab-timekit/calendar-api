@@ -16,6 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configure Git user
+        run: |
+          git config --global user.email "ci@calendar-api.com"
+          git config --global user.name "Calendar API CI"
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
