@@ -10,22 +10,23 @@ plugins {
 
 group = 'com.calendar.api'
 
-// Wersja i gałąź
 def baseVersion = project.version
 def gitRef = System.getenv("GITHUB_REF") ?: "refs/heads/local"
 def isMasterBranch = gitRef.endsWith("/master")
 version = isMasterBranch ? baseVersion : "${baseVersion}-SNAPSHOT"
 
-// Wersje zależności
 ext {
-    springBootVersion = '3.2.0'
+    springBootVersion = '3.5.3'
+    jacksonKotlinVersion = '2.19.1'
+    swaggerAnnotationsVersion = '2.2.31'
+    springdocVersion = '2.8.9'
 }
 
 repositories {
     mavenCentral()
 }
 
-def generatedDir = "$buildDir/generated/api"
+def generatedDir = layout.buildDirectory.dir("generated/api").get().asFile
 
 java {
     toolchain {
@@ -35,65 +36,68 @@ java {
 
 sourceSets {
     main {
-        java.srcDir("${buildDir}/generated/api/src/main/kotlin")
+        java.srcDirs += file("${generatedDir}/src/main/kotlin")
+        kotlin.srcDirs += file("${generatedDir}/src/main/kotlin")
     }
 }
 
 dependencies {
-    compileOnly "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    compileOnly "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
-    compileOnly 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    compileOnly 'org.jetbrains.kotlin:kotlin-reflect'
-    compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    compileOnly 'io.swagger.core.v3:swagger-annotations:2.2.21'
-    compileOnly 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    compileOnly "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compileOnly "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
+    compileOnly "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion"
+    compileOnly "org.jetbrains.kotlin:kotlin-reflect"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compileOnly "io.swagger.core.v3:swagger-annotations:$swaggerAnnotationsVersion"
+    compileOnly "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion"
 }
 
 tasks.withType(KotlinCompile).configureEach {
-    dependsOn tasks.openApiGenerate
-    kotlinOptions.jvmTarget = "21"
+    dependsOn tasks.named("openApiGenerate")
+    kotlinOptions {
+        jvmTarget = "21"
+    }
 }
 
 tasks.named("compileJava") {
-    dependsOn tasks.openApiGenerate
+    dependsOn tasks.named("openApiGenerate")
 }
 
 tasks.withType(PublishToMavenRepository).configureEach {
-    dependsOn tasks.openApiGenerate
+    dependsOn tasks.named("openApiGenerate")
 }
 
 openApiGenerate {
     generatorName.set("kotlin-spring")
-    inputSpec.set("${rootDir}/api/main-api-file.yaml")
-    outputDir.set(generatedDir)
+    inputSpec.set("$rootDir/api/main-api-file.yaml")
+    outputDir.set(generatedDir.toString())
 
     apiPackage.set("com.calendar.api.api")
     invokerPackage.set("com.calendar.api.invoker")
     modelPackage.set("com.calendar.api.model")
 
-    configOptions.put("interfaceOnly", "true")
-    configOptions.put("dateLibrary", "java8")
-    configOptions.put("useSpringBoot3", "true")
-    configOptions.put("reactive", "false")
+    configOptions.set([
+            "interfaceOnly": "true",
+            "dateLibrary": "java8",
+            "useSpringBoot3": "true",
+            "reactive": "false"
+    ])
 }
 
-// Czyszczenie katalogu przed generacją OpenAPI
 tasks.named("openApiGenerate") {
     doFirst {
         delete file(generatedDir)
     }
 }
 
-tasks.register('generateServer') {
-    dependsOn tasks.openApiGenerate
+tasks.register("generateServer") {
+    dependsOn tasks.named("openApiGenerate")
 }
 
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
-            from components.java
             groupId = project.group
-            artifactId = 'calendar-api'
+            artifactId = "calendar-api"
             version = project.version
         }
     }
@@ -119,6 +123,6 @@ release {
     newVersionCommitMessage = '[Release] - next version bumped to $version'
 
     git {
-        requireBranch.set('master')
+        requireBranch.set("master")
     }
 }
