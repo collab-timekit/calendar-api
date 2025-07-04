@@ -19,6 +19,22 @@ repositories {
 
 def generatedDir = layout.buildDirectory.dir("generated/api")
 
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/api/src/main/kotlin"
+        }
+    }
+}
+
+tasks.named("compileJava") {
+    dependsOn tasks.openApiGenerate
+}
+
+tasks.withType(PublishToMavenRepository).configureEach {
+    dependsOn tasks.openApiGenerate
+}
+
 openApiGenerate {
     generatorName.set("kotlin-spring")
     inputSpec.set("${rootDir}/api/main-api-file.yaml")
@@ -40,14 +56,6 @@ tasks.register('generateServer') {
 
 tasks.withType(JavaCompile).configureEach {
     dependsOn tasks.openApiGenerate
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir "${buildDir}/generated/api/src/main/kotlin"
-        }
-    }
 }
 
 publishing {
@@ -78,7 +86,7 @@ release {
     failOnSnapshotDependencies = false
     preTagCommitMessage = '[Release] - pre tag'
     tagCommitMessage = '[Release] - tag v${version}'
-    newVersionCommitMessage = '[Release] - next version bumped to ${version}'
+    newVersionCommitMessage = '[Release] - next version bumped to $version'
 
     git {
         requireBranch.set('master')
