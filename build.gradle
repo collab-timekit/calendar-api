@@ -1,6 +1,8 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id 'org.openapi.generator' version '7.6.0'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.10'
+    id 'org.jetbrains.kotlin.jvm' version '2.0.0'
     id 'java'
     id 'maven-publish'
     id 'net.researchgate.release' version '3.0.2'
@@ -8,36 +10,46 @@ plugins {
 
 group = 'com.calendar.api'
 
-// Odczyt wersji z gradle.properties (release plugin wymaga tego)
+// Wersja i gałąź
 def baseVersion = project.version
 def gitRef = System.getenv("GITHUB_REF") ?: "refs/heads/local"
 def isMasterBranch = gitRef.endsWith("/master")
-
-// Dodanie -SNAPSHOT na gałęziach innych niż master
 version = isMasterBranch ? baseVersion : "${baseVersion}-SNAPSHOT"
+
+// Wersje zależności
+ext {
+    springBootVersion = '3.2.0'
+}
 
 repositories {
     mavenCentral()
 }
 
-def generatedDir = layout.buildDirectory.dir("generated/api")
+def generatedDir = "$buildDir/generated/api"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 sourceSets {
     main {
-        java {
-            srcDir "${buildDir}/generated/api/src/main/kotlin"
-        }
-        kotlin {
-            srcDir "${buildDir}/generated/api/src/main/kotlin"
-        }
+        java.srcDir("${buildDir}/generated/api/src/main/kotlin")
     }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compileOnly "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compileOnly "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
+    compileOnly 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    compileOnly 'org.jetbrains.kotlin:kotlin-reflect'
+    compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compileOnly 'io.swagger.core.v3:swagger-annotations:2.2.21'
+    compileOnly 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+tasks.withType(KotlinCompile).configureEach {
     dependsOn tasks.openApiGenerate
     kotlinOptions.jvmTarget = "21"
 }
@@ -53,7 +65,7 @@ tasks.withType(PublishToMavenRepository).configureEach {
 openApiGenerate {
     generatorName.set("kotlin-spring")
     inputSpec.set("${rootDir}/api/main-api-file.yaml")
-    outputDir.set(generatedDir.get().asFile.absolutePath)
+    outputDir.set(generatedDir)
 
     apiPackage.set("com.calendar.api.api")
     invokerPackage.set("com.calendar.api.invoker")
@@ -63,6 +75,13 @@ openApiGenerate {
     configOptions.put("dateLibrary", "java8")
     configOptions.put("useSpringBoot3", "true")
     configOptions.put("reactive", "false")
+}
+
+// Czyszczenie katalogu przed generacją OpenAPI
+tasks.named("openApiGenerate") {
+    doFirst {
+        delete file(generatedDir)
+    }
 }
 
 tasks.register('generateServer') {
