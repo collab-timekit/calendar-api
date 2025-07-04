@@ -96,6 +96,7 @@ tasks.register("generateServer") {
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
+            from components.java
             groupId = project.group
             artifactId = "calendar-api"
             version = project.version
