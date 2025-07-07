@@ -1,16 +1,19 @@
 get:
   tags:
     - event
-  summary: Pobierz szczegóły wydarzenia
+  summary: Get event details
+  description: Retrieve details of the specified event
+  operationId: getEventDetails
   parameters:
     - in: path
       name: eventId
       schema:
         type: integer
       required: true
+      description: Event ID
   responses:
     '200':
-      description: Szczegóły wydarzenia
+      description: Event details
       content:
         application/json:
           schema:

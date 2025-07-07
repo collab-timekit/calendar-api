@@ -1,7 +1,8 @@
 post:
   tags:
     - event
-  summary: Utwórz nowe wydarzenie
+  summary: Create a new event
+  operationId: createEvent
   requestBody:
     required: true
     content:
@@ -9,8 +10,8 @@ post:
         schema:
           $ref: '../../components/schemas/EventDto.yaml'
   responses:
-    '200':
-      description: Utworzone wydarzenie
+    '201':
+      description: Created event
       content:
         application/json:
           schema:

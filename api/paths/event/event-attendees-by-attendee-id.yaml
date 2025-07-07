@@ -1,18 +1,21 @@
 delete:
   tags:
     - event
-  summary: Usuń uczestnika z wydarzenia
+  summary: Remove an attendee from an event
+  operationId: removeAttendeeFromEvent
   parameters:
     - in: path
       name: eventId
       schema:
         type: integer
       required: true
+      description: Unique identifier of the event
     - in: path
       name: attendeeId
       schema:
         type: string
       required: true
+      description: Unique identifier of the attendee to be removed
   responses:
     '204':
-      description: Uczestnik usunięty
+      description: Attendee was successfully removed from the event

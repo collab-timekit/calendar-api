@@ -1,14 +1,16 @@
 post:
   tags:
     - event
-  summary: Dodaj uczestników do wydarzenia
+  summary: Add attendees to event
+  description: Add attendees to the specified event
+  operationId: addAttendeesToEvent
   parameters:
     - in: path
       name: eventId
       schema:
         type: integer
       required: true
-      description: ID wydarzenia
+      description: Event ID
   requestBody:
     required: true
     content:
@@ -19,4 +21,4 @@ post:
             $ref: '../../components/schemas/AttendeeDto.yaml'
   responses:
     '204':
-      description: Uczestnicy dodani
+      description: Attendees successfully added

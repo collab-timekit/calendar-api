@@ -1,19 +1,22 @@
 post:
   tags:
     - event
-  summary: Odpowiedz na zaproszenie na wydarzenie
+  summary: Respond to event invitation
+  description: Submit a response to an event invitation
+  operationId: respondToEventInvitation
   parameters:
     - in: path
       name: eventId
       schema:
         type: integer
       required: true
+      description: Event ID
     - in: query
       name: status
       schema:
         $ref: '../../components/schemas/enums/ResponseStatus.yaml'
       required: true
-      description: Status odpowiedzi
+      description: Response status
   responses:
     '204':
-      description: Odpowiedź zapisana
+      description: Response recorded

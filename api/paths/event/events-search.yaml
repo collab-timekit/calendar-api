@@ -1,7 +1,9 @@
 post:
   tags:
     - event
-  summary: Pobierz wydarzenia wg filtru wyszukiwania
+  summary: Get events by search filter
+  description: Retrieve events based on search filter criteria
+  operationId: getEventsBySearchFilter
   requestBody:
     required: true
     content:
@@ -10,7 +12,7 @@ post:
           $ref: '../../components/schemas/SearchFilter.yaml'
   responses:
     '200':
-      description: Lista wydarzeń
+      description: List of events
       content:
         application/json:
           schema:

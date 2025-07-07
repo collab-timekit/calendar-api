@@ -1,16 +1,18 @@
 get:
   tags:
     - calendar
-  summary: Pobierz szczegóły kalendarza
+  summary: Retrieve calendar details by ID
+  operationId: findCalendarById
   parameters:
     - in: path
       name: calendarId
       schema:
         type: integer
       required: true
+      description: Unique identifier of the calendar
   responses:
     '200':
-      description: Szczegóły kalendarza
+      description: Calendar details returned successfully
       content:
         application/json:
           schema:
@@ -19,13 +21,15 @@ get:
 put:
   tags:
     - calendar
-  summary: Aktualizuj kalendarz
+  summary: Update calendar by ID
+  operationId: updateCalendar
   parameters:
     - in: path
       name: calendarId
       schema:
         type: integer
       required: true
+      description: Unique identifier of the calendar to update
   requestBody:
     required: true
     content:
@@ -34,7 +38,7 @@ put:
           $ref: '../../components/schemas/CalendarDto.yaml'
   responses:
     '200':
-      description: Zaktualizowany kalendarz
+      description: Calendar updated successfully
       content:
         application/json:
           schema:
@@ -43,13 +47,15 @@ put:
 delete:
   tags:
     - calendar
-  summary: Usuń kalendarz
+  summary: Delete calendar by ID
+  operationId: removeCalendar
   parameters:
     - in: path
       name: calendarId
       schema:
         type: integer
       required: true
+      description: Unique identifier of the calendar to delete
   responses:
     '204':
-      description: Kalendarz usunięty
+      description: Calendar successfully deleted
