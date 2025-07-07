@@ -9,6 +9,7 @@ post:
       name: eventId
       schema:
         type: integer
+        format: int64
       required: true
       description: Event ID
   requestBody:

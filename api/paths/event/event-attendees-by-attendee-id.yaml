@@ -8,6 +8,7 @@ delete:
       name: eventId
       schema:
         type: integer
+        format: int64
       required: true
       description: Unique identifier of the event
     - in: path
