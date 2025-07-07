@@ -17,7 +17,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../../components/schemas/Calendar.yaml'
+            $ref: '../../components/schemas/CalendarDto.yaml'
 
 put:
   tags:
@@ -44,7 +44,7 @@ put:
       content:
         application/json:
           schema:
-            $ref: '../../components/schemas/Calendar.yaml'
+            $ref: '../../components/schemas/CalendarDto.yaml'
 
 delete:
   tags:

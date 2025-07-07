@@ -15,4 +15,4 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../../components/schemas/Event.yaml'
+            $ref: '../../components/schemas/EventDto.yaml'

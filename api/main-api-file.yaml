@@ -33,16 +33,10 @@ components:
   schemas:
     AttendeeDto:
       $ref: './components/schemas/AttendeeDto.yaml'
-    Attendee:
-      $ref: './components/schemas/Attendee.yaml'
     CalendarDto:
       $ref: './components/schemas/CalendarDto.yaml'
-    Calendar:
-      $ref: './components/schemas/Calendar.yaml'
     EventDto:
       $ref: './components/schemas/EventDto.yaml'
-    Event:
-      $ref: './components/schemas/Event.yaml'
     FilterRequest:
       $ref: './components/schemas/FilterRequest.yaml'
     PageRequest:

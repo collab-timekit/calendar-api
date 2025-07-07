@@ -15,7 +15,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: '../../components/schemas/Calendar.yaml'
+            $ref: '../../components/schemas/CalendarDto.yaml'
 
 get:
   tags:
@@ -30,4 +30,4 @@ get:
           schema:
             type: array
             items:
-              $ref: '../../components/schemas/Calendar.yaml'
+              $ref: '../../components/schemas/CalendarDto.yaml'
