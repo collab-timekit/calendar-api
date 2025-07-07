@@ -1,0 +1,17 @@
+get:
+  tags:
+    - event
+  summary: Pobierz szczegóły wydarzenia
+  parameters:
+    - in: path
+      name: eventId
+      schema:
+        type: integer
+      required: true
+  responses:
+    '200':
+      description: Szczegóły wydarzenia
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/Event.yaml'

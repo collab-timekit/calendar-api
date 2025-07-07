@@ -1,0 +1,9 @@
+PageRequest:
+  type: object
+  properties:
+    page:
+      type: integer
+      example: 0
+    size:
+      type: integer
+      example: 20

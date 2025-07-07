@@ -1,0 +1,32 @@
+Attendee:
+  type: object
+  properties:
+    id:
+      type: integer
+      example: 456
+    eventId:
+      type: integer
+      example: 123
+    userId:
+      type: string
+      example: "user-456"
+    email:
+      type: string
+      format: email
+      example: "anna.nowak@example.com"
+    displayName:
+      type: string
+      example: "Anna Nowak"
+    responseStatus:
+      $ref: './enums/ResponseStatus.yaml'
+    optional:
+      type: boolean
+      example: true
+    createdAt:
+      type: string
+      format: date-time
+      example: "2025-06-30T08:00:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      example: "2025-06-30T09:00:00Z"

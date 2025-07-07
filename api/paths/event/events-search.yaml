@@ -1,0 +1,19 @@
+post:
+  tags:
+    - event
+  summary: Pobierz wydarzenia wg filtru wyszukiwania
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/SearchFilter.yaml'
+  responses:
+    '200':
+      description: Lista wydarzeń
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../components/schemas/Event.yaml'

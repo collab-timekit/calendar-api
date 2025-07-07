@@ -1,0 +1,19 @@
+post:
+  tags:
+    - event
+  summary: Odpowiedz na zaproszenie na wydarzenie
+  parameters:
+    - in: path
+      name: eventId
+      schema:
+        type: integer
+      required: true
+    - in: query
+      name: status
+      schema:
+        $ref: '../../components/schemas/enums/ResponseStatus.yaml'
+      required: true
+      description: Status odpowiedzi
+  responses:
+    '204':
+      description: Odpowiedź zapisana

@@ -1,0 +1,31 @@
+post:
+  tags:
+    - calendar
+  summary: Utwórz nowy kalendarz
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/CalendarDto.yaml'
+  responses:
+    '201':
+      description: Utworzony kalendarz
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/Calendar.yaml'
+
+get:
+  tags:
+    - calendar
+  summary: Pobierz kalendarze użytkownika
+  responses:
+    '200':
+      description: Lista kalendarzy
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../components/schemas/Calendar.yaml'

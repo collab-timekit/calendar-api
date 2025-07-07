@@ -79,7 +79,8 @@ openApiGenerate {
             "interfaceOnly": "true",
             "dateLibrary": "java8",
             "useSpringBoot3": "true",
-            "reactive": "false"
+            "reactive": "false",
+            "useTags": "true",
     ])
 }
 

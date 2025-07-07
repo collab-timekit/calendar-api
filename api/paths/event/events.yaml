@@ -1,0 +1,17 @@
+post:
+  tags:
+    - event
+  summary: Utwórz nowe wydarzenie
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/EventDto.yaml'
+  responses:
+    '200':
+      description: Utworzone wydarzenie
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/Event.yaml'

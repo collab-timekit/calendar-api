@@ -1,0 +1,18 @@
+delete:
+  tags:
+    - event
+  summary: Usuń uczestnika z wydarzenia
+  parameters:
+    - in: path
+      name: eventId
+      schema:
+        type: integer
+      required: true
+    - in: path
+      name: attendeeId
+      schema:
+        type: string
+      required: true
+  responses:
+    '204':
+      description: Uczestnik usunięty

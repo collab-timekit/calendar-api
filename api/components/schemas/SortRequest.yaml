@@ -1,0 +1,11 @@
+SortRequest:
+  type: object
+  properties:
+    sortBy:
+      type: string
+      example: "startTime"
+    direction:
+      type: string
+      enum:
+        - ASC
+        - DESC

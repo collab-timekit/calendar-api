@@ -1,0 +1,22 @@
+post:
+  tags:
+    - event
+  summary: Dodaj uczestników do wydarzenia
+  parameters:
+    - in: path
+      name: eventId
+      schema:
+        type: integer
+      required: true
+      description: ID wydarzenia
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            $ref: '../../components/schemas/AttendeeDto.yaml'
+  responses:
+    '204':
+      description: Uczestnicy dodani

@@ -1,0 +1,7 @@
+ResponseStatus:
+  type: string
+  enum:
+    - PENDING
+    - ACCEPTED
+    - DECLINED
+    - TENTATIVE

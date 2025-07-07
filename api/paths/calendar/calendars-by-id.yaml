@@ -1,0 +1,55 @@
+get:
+  tags:
+    - calendar
+  summary: Pobierz szczegóły kalendarza
+  parameters:
+    - in: path
+      name: calendarId
+      schema:
+        type: integer
+      required: true
+  responses:
+    '200':
+      description: Szczegóły kalendarza
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/Calendar.yaml'
+
+put:
+  tags:
+    - calendar
+  summary: Aktualizuj kalendarz
+  parameters:
+    - in: path
+      name: calendarId
+      schema:
+        type: integer
+      required: true
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/CalendarDto.yaml'
+  responses:
+    '200':
+      description: Zaktualizowany kalendarz
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/Calendar.yaml'
+
+delete:
+  tags:
+    - calendar
+  summary: Usuń kalendarz
+  parameters:
+    - in: path
+      name: calendarId
+      schema:
+        type: integer
+      required: true
+  responses:
+    '204':
+      description: Kalendarz usunięty
