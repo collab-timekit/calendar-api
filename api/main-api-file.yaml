@@ -43,8 +43,14 @@ components:
       $ref: './components/schemas/EventDto.yaml'
     Event:
       $ref: './components/schemas/Event.yaml'
+    FilterRequest:
+      $ref: './components/schemas/FilterRequest.yaml'
+    PageRequest:
+      $ref: './components/schemas/PageRequest.yaml'
     SearchFilter:
       $ref: './components/schemas/SearchFilter.yaml'
+    SortRequest:
+      $ref: './components/schemas/SortRequest.yaml'
     ResponseStatus:
       $ref: './components/schemas/enums/ResponseStatus.yaml'
     EventStatus:

@@ -1,11 +1,10 @@
-SearchFilter:
-  type: object
-  properties:
-    filters:
-      type: array
-      items:
-        $ref: './FilterRequest.yaml'
-    pageRequest:
-      $ref: './PageRequest.yaml'
-    sortRequest:
-      $ref: './SortRequest.yaml'
+type: object
+properties:
+  filters:
+    type: array
+    items:
+      $ref: './FilterRequest.yaml'
+  pageRequest:
+    $ref: './PageRequest.yaml'
+  sortRequest:
+    $ref: './SortRequest.yaml'

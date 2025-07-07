@@ -1,15 +1,14 @@
-Calendar:
-  type: object
-  properties:
-    id:
-      type: integer
-      example: 1
-    name:
-      type: string
-      example: "Work Calendar"
-    description:
-      type: string
-      example: "Calendar for work related events"
-    ownerId:
-      type: string
-      example: "user-123"
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+  name:
+    type: string
+    example: "Work Calendar"
+  description:
+    type: string
+    example: "Calendar for work related events"
+  ownerId:
+    type: string
+    example: "user-123"

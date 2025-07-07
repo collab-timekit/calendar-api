@@ -1,12 +1,11 @@
-FilterRequest:
-  type: object
-  properties:
-    field:
-      type: string
-      example: "title"
-    operation:
-      type: string
-      example: "contains"
-    value:
-      type: string
-      example: "meeting"
+type: object
+properties:
+  field:
+    type: string
+    example: "title"
+  operation:
+    type: string
+    example: "contains"
+  value:
+    type: string
+    example: "meeting"

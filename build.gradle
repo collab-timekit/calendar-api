@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id 'org.openapi.generator' version '7.6.0'
-    id 'org.jetbrains.kotlin.jvm' version '2.0.0'
     id 'java'
     id 'maven-publish'
     id 'net.researchgate.release' version '3.0.2'
@@ -20,6 +17,7 @@ ext {
     jacksonKotlinVersion = '2.19.1'
     swaggerAnnotationsVersion = '2.2.31'
     springdocVersion = '2.8.9'
+    jacksonDatabindVersion = '0.2.6'
 }
 
 repositories {
@@ -32,30 +30,28 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 sourceSets {
     main {
-        java.srcDirs += file("${generatedDir}/src/main/kotlin")
-        kotlin.srcDirs += file("${generatedDir}/src/main/kotlin")
+        java.srcDirs += file("${generatedDir}/src/main/java")
     }
 }
 
 dependencies {
-    compileOnly "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    compileOnly "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
-    compileOnly "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlinVersion"
-    compileOnly "org.jetbrains.kotlin:kotlin-reflect"
-    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.openapitools:jackson-databind-nullable:$jacksonDatabindVersion"
+
+    implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
+
     compileOnly "io.swagger.core.v3:swagger-annotations:$swaggerAnnotationsVersion"
     compileOnly "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion"
 }
 
-tasks.withType(KotlinCompile).configureEach {
+tasks.withType(JavaCompile).configureEach {
     dependsOn tasks.named("openApiGenerate")
-    kotlinOptions {
-        jvmTarget = "21"
-    }
 }
 
 tasks.named("compileJava") {
@@ -67,11 +63,11 @@ tasks.withType(PublishToMavenRepository).configureEach {
 }
 
 openApiGenerate {
-    generatorName.set("kotlin-spring")
+    generatorName.set("spring")
     inputSpec.set("$rootDir/api/main-api-file.yaml")
     outputDir.set(generatedDir.toString())
 
-    apiPackage.set("com.calendar.api.api")
+    apiPackage.set("com.calendar.api")
     invokerPackage.set("com.calendar.api.invoker")
     modelPackage.set("com.calendar.api.model")
 
@@ -79,14 +75,13 @@ openApiGenerate {
             "interfaceOnly": "true",
             "dateLibrary": "java8",
             "useSpringBoot3": "true",
-            "reactive": "false",
             "useTags": "true",
     ])
 }
 
 tasks.named("openApiGenerate") {
     doFirst {
-        delete file(generatedDir)
+        delete generatedDir
     }
 }
 

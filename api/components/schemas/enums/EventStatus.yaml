@@ -1,6 +1,5 @@
-EventStatus:
-  type: string
-  enum:
-    - PLANNED
-    - CANCELLED
-    - COMPLETED
+type: string
+enum:
+  - PLANNED
+  - CANCELLED
+  - COMPLETED
