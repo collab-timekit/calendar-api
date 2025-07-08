@@ -15,7 +15,7 @@ post:
     - in: query
       name: status
       schema:
-        $ref: '../../components/schemas/enums/ResponseStatus.yaml'
+        $ref: '../../components/schemas/enums/ResponseStatusDto.yaml'
       required: true
       description: Response status
   responses:

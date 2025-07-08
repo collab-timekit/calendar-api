@@ -45,7 +45,7 @@ components:
       $ref: './components/schemas/SearchFilter.yaml'
     SortRequest:
       $ref: './components/schemas/SortRequest.yaml'
-    ResponseStatus:
-      $ref: './components/schemas/enums/ResponseStatus.yaml'
+    ResponseStatusDto:
+      $ref: './components/schemas/enums/ResponseStatusDto.yaml'
     EventStatus:
       $ref: './components/schemas/enums/EventStatus.yaml'
