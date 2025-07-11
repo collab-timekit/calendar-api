@@ -17,17 +17,17 @@ paths:
   /api/events/search:
     $ref: './paths/event/events-search.yaml'
 
-  /api/events/{eventId}/attendees:
-    $ref: './paths/event/events-attendees-by-event-id.yaml'
-
-  /api/events/{eventId}/response:
-    $ref: './paths/event/events-response.yaml'
-
   /api/events/{eventId}:
     $ref: './paths/event/events-by-id.yaml'
 
-  /api/events/{eventId}/attendees/{attendeeId}:
-    $ref: './paths/event/event-attendees-by-attendee-id.yaml'
+  /api/attendees/{eventId}:
+    $ref: './paths/attendee/add-attendees-to-event.yaml'
+
+  /api/attendees/{eventId}/respond:
+    $ref: './paths/attendee/respond-to-event.yaml'
+
+  /api/attendees/event/{eventId}/attendee/{attendeeId}:
+    $ref: './paths/attendee/delete-attendee.yaml'
 
 components:
   schemas:

@@ -1,6 +1,6 @@
 post:
   tags:
-    - event
+    - attendee
   summary: Add attendees to event
   description: Add attendees to the specified event
   operationId: addAttendeesToEvent

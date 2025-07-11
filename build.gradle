@@ -67,9 +67,10 @@ openApiGenerate {
     inputSpec.set("$rootDir/api/main-api-file.yaml")
     outputDir.set(generatedDir.toString())
 
+    packageName.set("com.calendar")
     apiPackage.set("com.calendar.api")
-    invokerPackage.set("com.calendar.api.invoker")
     modelPackage.set("com.calendar.api.model")
+    invokerPackage.set("com.calendar.api.invoker")
 
     configOptions.set([
             "interfaceOnly": "true",
@@ -117,7 +118,7 @@ release {
     failOnSnapshotDependencies = false
     preTagCommitMessage = '[Release] - pre tag'
     tagCommitMessage = '[Release] - tag v${version}'
-    newVersionCommitMessage = '[Release] - next version bumped to $version'
+    newVersionCommitMessage = '[Release] - next version bumped to ${version}'
 
     git {
         requireBranch.set("master")

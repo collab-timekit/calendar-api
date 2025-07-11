@@ -1,6 +1,6 @@
 post:
   tags:
-    - event
+    - attendee
   summary: Respond to event invitation
   description: Submit a response to an event invitation
   operationId: respondToEventInvitation

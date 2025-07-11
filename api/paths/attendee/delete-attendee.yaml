@@ -1,6 +1,6 @@
 delete:
   tags:
-    - event
+    - attendee
   summary: Remove an attendee from an event
   operationId: removeAttendeeFromEvent
   parameters:
