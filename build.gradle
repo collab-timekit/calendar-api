@@ -118,7 +118,7 @@ release {
     failOnSnapshotDependencies = false
     preTagCommitMessage = '[Release] - pre tag'
     tagCommitMessage = '[Release] - tag v${version}'
-    newVersionCommitMessage = '[Release] - next version bumped to ${version}'
+    newVersionCommitMessage = '[Release] - next version bumped to '
 
     git {
         requireBranch.set("master")
